@@ -4,27 +4,31 @@
 using namespace std;
 
 int x = 0;
-int ITERATIONS = 1000000;
+int ITERATIONS = 100000000;
+
+pthread_mutex_t mutex;
 
 /*
 OUTPUT:
-Value of x = 128758
-Expected : 200000
-Missed % : 35.621
+Value of x = 2000000
+Expected : 2000000
+Missed % : 0
 
 OUTPUT:
-Value of x = 1046202
-Expected : 2000000
-Missed % : 47.6899
+Value of x = 200000000
+Expected : 200000000
+Missed % : 0
 
-This is called Race Condition
+Thus we can avoid race conditions using mutex locks
 */
 
 void *routine(void *)
 {
 	for (int i = 0; i < ITERATIONS; i++)
 	{
-		x++;
+		pthread_mutex_lock(&mutex);	  // Wait until the t1 finishes and lock the memory
+		x++;						  // Execute
+		pthread_mutex_unlock(&mutex); // Unlock the memory
 	}
 	return nullptr;
 }
@@ -32,6 +36,8 @@ void *routine(void *)
 int main()
 {
 	pthread_t t1, t2;
+	pthread_mutex_init(&mutex, NULL); // Reserve the memory for mutex variable
+
 	if (pthread_create(&t1, NULL, &routine, NULL) != 0)
 	{
 		cout << "Unable to create thread t1" << endl;
@@ -50,5 +56,6 @@ int main()
 	cout << "Expected : " << ITERATIONS * 2 << endl;
 	cout << "Missed % : " << ((float)(ITERATIONS * 2 - x) / (float)(ITERATIONS * 2)) * 100 << endl;
 
+	pthread_mutex_destroy(&mutex); // Free the memory
 	return 0;
 }
