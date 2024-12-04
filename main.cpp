@@ -21,9 +21,9 @@ void *routine(void *)
 {
 	for (int i = 0; i < ITERATIONS; i++)
 	{
-		// pthread_mutex_lock(&mutex);	  // Wait until the t1 finishes and lock the memory
+		pthread_mutex_lock(&mutex);	  // Wait until the t1 finishes and lock the memory
 		x++;						  // Execute
-		// pthread_mutex_unlock(&mutex); // Unlock the memory
+		pthread_mutex_unlock(&mutex); // Unlock the memory
 	}
 	return nullptr;
 }
