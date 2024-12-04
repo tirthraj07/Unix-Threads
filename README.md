@@ -11,6 +11,8 @@ So if the process gets preempted after 2, and other process increments the value
 to the initial process, the value at location of x will get overriden by old incremented value
 
 Eg.
+
+```
 initially x = 0
 
 Process 1:
@@ -28,6 +30,7 @@ Process 1:
 Step 2: INCR eax ==> eax = 1
 Step 3: mov eax->x ==> x = 1
 -- ENDS Process 1
+```
 
 So instead of incrementing twice, it gets incremented only once. This is RACE CONDITION
 
